@@ -1,5 +1,6 @@
 # Work with Python 3.6
 import discord
+from discord.ext import commands
 from xml.dom import minidom
 import random
 
@@ -14,9 +15,45 @@ token = mydoc.getElementsByTagName('BotToken')[0].firstChild.data
 # Command prefix character
 prefixChar = mydoc.getElementsByTagName('PrefixChar')[0].firstChild.data
 
-client = discord.Client()
+description = '''Bot for the Friendly CoOp Discord server'''
+bot = commands.Bot(command_prefix = str(prefixChar), description=description)
 
-@client.event
+@bot.event
+async def on_ready():
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
+    print("Prefix char: "+prefixChar)
+    print('------')
+
+
+
+#######################################################################
+# 
+# Commands callable in the chat by using the prefix character
+# 
+#######################################################################
+@bot.command()
+async def add(left : int, right : int):
+    """Adds two numbers together."""
+    await bot.say(left + right)
+
+@bot.command(aliases=["flip"])
+async def coinflip():
+    print('coinflip')
+    coinsides = ['Heads', 'Tails']
+    await bot.say(f"Coin flip result: **{random.choice(coinsides)}**!")
+    
+
+
+
+#######################################################################
+# 
+# Commands that aren't explictly called
+# checks for certain text in each message
+# 
+#######################################################################
+@bot.event
 async def on_message(message):
 
     messageStrLower = message.content
@@ -50,21 +87,15 @@ async def on_message(message):
         goodBotResponses.append("Bot is the Cakeob!");
         msg = random.choice(goodBotResponses)
 
-    if msg == None and messageStrLower.startswith(prefixChar+"hello"):
-        msg = "Hello {0.author.mention}".format(message)
-
     if msg == None and messageStrLower.rfind("pixis") != -1:
         msg = "PIXISUUUUUUUU"
 
+    # Send Message if we have one
     if msg != None:
-        await client.send_message(message.channel, msg)
+        await bot.send_message(message.channel, msg)
+    # Try to process commands if no message sent by the bot yet
+    else:
+        await bot.process_commands(message)
 
-
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
-
-client.run(token)
+# Start the bot
+bot.run(token)
