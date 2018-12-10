@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from xml.dom import minidom
 import random
+import os
 
 try:
     mydoc = minidom.parse("CoOpBotParameters.xml")
@@ -37,12 +38,6 @@ async def on_ready():
 async def add(left : int, right : int):
     """Adds two numbers together."""
     await bot.say(left + right)
-
-@bot.command(aliases=["flip"])
-async def coinflip():
-    print('coinflip')
-    coinsides = ['Heads', 'Tails']
-    await bot.say(f"Coin flip result: **{random.choice(coinsides)}**!")
     
 
 
@@ -97,5 +92,12 @@ async def on_message(message):
     else:
         await bot.process_commands(message)
 
+# import modules
+for file in os.listdir("Modules"):
+    if file.endswith(".py"):
+        name = file[:-3]
+        bot.load_extension(f"Modules.{name}")
+
+
 # Start the bot
-bot.run(token)
+bot.run(token, bot=True, reconnect=True)
