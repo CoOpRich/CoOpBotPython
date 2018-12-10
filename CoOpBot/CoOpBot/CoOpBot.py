@@ -28,7 +28,6 @@ async def on_ready():
     print('------')
 
 
-
 #######################################################################
 # 
 # Commands callable in the chat by using the prefix character
@@ -39,8 +38,6 @@ async def add(left : int, right : int):
     """Adds two numbers together."""
     await bot.say(left + right)
     
-
-
 
 #######################################################################
 # 
@@ -97,7 +94,6 @@ for file in os.listdir("Modules"):
     if file.endswith(".py"):
         name = file[:-3]
         bot.load_extension(f"Modules.{name}")
-
 
 # Start the bot
 bot.run(token, bot=True, reconnect=True)

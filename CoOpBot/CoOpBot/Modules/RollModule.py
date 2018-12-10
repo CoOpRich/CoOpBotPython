@@ -11,11 +11,10 @@ class RollModule:
 
     @commands.command(name="coinflip", aliases=["flip"])
     async def coinflip(self):
-        print('coinflip')
         coinsides = ['Heads', 'Tails']
         await self.bot.say(f"Coin flip result: **{random.choice(coinsides)}**!")
         
-# The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case RollModule.
+# The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case RollModule.
 # When we load the cog, we use the name of the file.
 def setup(bot):
     bot.add_cog(RollModule(bot))

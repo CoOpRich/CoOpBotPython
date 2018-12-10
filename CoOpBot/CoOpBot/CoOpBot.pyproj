@@ -26,6 +26,9 @@
     <Compile Include="Modules\RollModule.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\SuperUserModule.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.6" />
