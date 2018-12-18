@@ -4,6 +4,7 @@ from discord.ext import commands
 from xml.dom import minidom
 import random
 import os
+import asyncio
 
 try:
     mydoc = minidom.parse("CoOpBotParameters.xml")
@@ -17,7 +18,7 @@ token = mydoc.getElementsByTagName('BotToken')[0].firstChild.data
 prefixChar = mydoc.getElementsByTagName('PrefixChar')[0].firstChild.data
 
 description = '''Bot for the Friendly CoOp Discord server'''
-bot = commands.Bot(command_prefix = str(prefixChar), description=description)
+bot = commands.Bot(command_prefix = str(prefixChar), description = description)
 
 @bot.event
 async def on_ready():
@@ -26,6 +27,38 @@ async def on_ready():
     print(bot.user.id)
     print("Prefix char: "+prefixChar)
     print('------')
+
+
+#######################################################################
+# 
+# Background task
+# runs every 5 minutes to automatically assign game roles to users
+# 
+#######################################################################
+async def assign_game_roles():
+    await bot.wait_until_ready()
+    while not bot.is_closed:
+        # Do for each server
+        for server in bot.connection.servers:
+            # Do for each user in that server
+            for user in server.members:
+                # Check if they are playing a game
+                if user.game is None:
+                    pass
+                else:
+                    # Loop through the roles in the current server
+                    for role in server.roles:
+                        # Check if the game name exists as a role
+                        if user.game.name == role.name:
+                            # Assign role to user if they are not a member of that role already
+                            if role in user.roles:
+                                pass
+                            else:
+                                await bot.add_roles(user, role)
+
+        # TODO - check if a string translation exists from the game being played to a valid role name
+
+        await asyncio.sleep(300)
 
 
 #######################################################################
@@ -48,7 +81,7 @@ async def add(left : int, right : int):
 @bot.event
 async def on_message(message):
 
-    messageStrLower = message.content
+    messageStrLower = message.content.lower()
     msg = None
     # We do not want the bot to reply to itself or any other bots
     if message.author.bot:
@@ -95,5 +128,7 @@ for file in os.listdir("Modules"):
         name = file[:-3]
         bot.load_extension(f"Modules.{name}")
 
+# Set the background task to run
+bot.loop.create_task(assign_game_roles())
 # Start the bot
 bot.run(token, bot=True, reconnect=True)
