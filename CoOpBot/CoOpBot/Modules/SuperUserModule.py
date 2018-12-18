@@ -15,6 +15,19 @@ class SuperUserModule:
         message = " ".join(text)
         await self.bot.send_message(channel, f"{message}")
 
+    @commands.has_permissions(administrator=True)
+    async def update():
+        await self.bot.say(f"**Update bot using lastest Git commits?**")
+        response = await self.bot.wait_for_message(author=ctx.message.author, channel=ctx.message.channel)
+        #if response is None:
+            #await self.bot.say("You took too long. I'm impatient, don't make me wait")
+            #return
+        if response.content == "yes":
+            """updates and reboots bot"""
+            from subprocess import call
+            call(["sudo git -C /var/CoOpBotPython/ pull"])
+            await self.bot.say("Update started")
+            # Restart program
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case SuperUserModule.
 # When we load the cog, we use the name of the file.
