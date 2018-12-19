@@ -14,9 +14,11 @@ class SuperUserModule:
         """Makes the discord say the given text in the given channel"""
         message = " ".join(text)
         await self.bot.send_message(channel, f"{message}")
+        
 
+    @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
-    async def update():
+    async def update(self, ctx):
         await self.bot.say(f"**Update bot using lastest Git commits?**")
         response = await self.bot.wait_for_message(author=ctx.message.author, channel=ctx.message.channel)
         #if response is None:

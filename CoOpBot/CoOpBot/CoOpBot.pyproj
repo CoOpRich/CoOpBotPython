@@ -26,6 +26,9 @@
     <Compile Include="Modules\AdminModule.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\CoOpGaming.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Modules\RollModule.py">
       <SubType>Code</SubType>
     </Compile>
