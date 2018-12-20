@@ -48,7 +48,7 @@ class SuperUserModule:
             """updates and reboots bot"""
             from subprocess import run
             #gitResponse = run(["sudo ls", "-lrta"])
-            gitResponse = run(["sudo git", "-C", "/var/CoOpBotPython/", "pull"], shell=True)
+            gitResponse = run(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
             await self.bot.say("Update started")
             await self.bot.say(gitResponse)
             globals.getVersion()
