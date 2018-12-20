@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import globals
 
 class SuperUserModule:
     """Module for su commands"""
@@ -14,11 +15,28 @@ class SuperUserModule:
         """Makes the discord say the given text in the given channel"""
         message = " ".join(text)
         await self.bot.send_message(channel, f"{message}")
+
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def suSetSpamTimer(self, ctx, seconds: int):
+        """Sets the timer for spam messaging"""
+        globals.setSpamTimer(seconds)
+        await self.bot.say(f"Spam timer set to {seconds} seconds")
+
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def suSetSpamMessageLimit(self, ctx, messages: int):
+        """Sets the message limit for spam messaging"""
+        globals.setSpamMessageLimit(messages)
+        await self.bot.say(f"Spam message limit set to {messages} messages")
         
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
     async def update(self, ctx):
+        """Updates the bot by pulling the latest code from Git"""
         await self.bot.say(f"**Update bot using lastest Git commits?**")
         response = await self.bot.wait_for_message(author=ctx.message.author, channel=ctx.message.channel)
         #if response is None:

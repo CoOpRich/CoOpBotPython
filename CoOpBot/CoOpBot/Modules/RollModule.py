@@ -11,6 +11,7 @@ class RollModule:
 
     @commands.command(name="coinflip", aliases=["flip"])
     async def coinflip(self):
+        """Flips a coin"""
         coinsides = ['Heads', 'Tails']
         await self.bot.say(f"Coin flip result: **{random.choice(coinsides)}**!")
         
