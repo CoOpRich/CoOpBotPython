@@ -36,8 +36,8 @@ class SuperUserModule:
         await self.bot.say(f"Spam message limit set to {messages} messages")
         
     def restartBot():
-        os.execv('sudo {__file__}', sys.argv)
-        #os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
+        os.execv(__file__, sys.argv)
+        #os.execl(" /var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
