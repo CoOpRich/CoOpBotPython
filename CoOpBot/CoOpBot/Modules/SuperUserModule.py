@@ -46,7 +46,7 @@ class SuperUserModule:
             #return
         if response.content == "yes" or response.content == "Yes":
             """updates and reboots bot"""
-            from subprocess import run
+            from subprocess import check_output
             #gitResponse = run(["sudo ls", "-lrta"])
             gitResponse = check_output(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
             await self.bot.say("Update started")

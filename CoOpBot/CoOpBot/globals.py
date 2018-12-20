@@ -39,7 +39,7 @@ def setSpamMessageLimit(messageCount: int):
     
 def getVersion():
     global version
-    from subprocess import run
+    from subprocess import check_output
     version = check_output(["sudo git -C /var/CoOpBotPython/ log -1"], shell=True)
 
 #######################################################################
