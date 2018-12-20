@@ -47,15 +47,14 @@ class SuperUserModule:
         if response.content == "yes" or response.content == "Yes":
             """updates and reboots bot"""
             from subprocess import check_output
-            #gitResponse = run(["sudo ls", "-lrta"])
             gitResponse = check_output(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
             await self.bot.say("Update started")
-            await self.bot.say(gitResponse)
-            globals.getVersion()
+            await self.bot.say(gitResponse) # Should show results from pull
+            globals.getVersion() # gets github commit log
             await self.bot.say(globals.version)
             # Restart program
-            #os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
-            #os.execl(__file__, "")
+            os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
+            os.execl(__file__, "")
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case SuperUserModule.
 # When we load the cog, we use the name of the file.
