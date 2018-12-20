@@ -48,12 +48,11 @@ class SuperUserModule:
             """updates and reboots bot"""
             from subprocess import run
             #gitResponse = run(["sudo ls", "-lrta"])
-            gitResponse = run(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
+            gitResponse = check_output(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
             await self.bot.say("Update started")
             await self.bot.say(gitResponse)
             globals.getVersion()
-            global version
-            await self.bot.say(version)
+            await self.bot.say(globals.version)
             # Restart program
             #os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
             #os.execl(__file__, "")
