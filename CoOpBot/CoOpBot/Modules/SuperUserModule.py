@@ -34,14 +34,14 @@ class SuperUserModule:
         globals.setSpamMessageLimit(messages)
         await self.bot.say(f"Spam message limit set to {messages} messages")
         
-    def restart():
+    def restartBot():
         os.execv(__file__, sys.argv)
         #os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
     async def restart(self, ctx):
-            restart()
+        SuperUserModule.restartBot()
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
@@ -61,7 +61,7 @@ class SuperUserModule:
             globals.getVersion() # gets github commit log
             await self.bot.say(globals.version)
             # Restart program
-            restart()
+            SuperUserModule.restartBot()
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case SuperUserModule.
 # When we load the cog, we use the name of the file.
