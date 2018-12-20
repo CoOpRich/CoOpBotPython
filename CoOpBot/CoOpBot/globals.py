@@ -1,6 +1,7 @@
 import time
 import sched
 import discord
+import subprocess
 import asyncio
 from discord.ext import commands
 
@@ -36,7 +37,11 @@ def setSpamMessageLimit(messageCount: int):
     global spamMessageLimit
     spamMessageLimit = messageCount
     
-    
+def getVersion():
+    global version
+    from subprocess import run
+    version = run(["sudo", "git", "rev-parse", "/var/CoOpBotPython/", "--short", "HEAD"], shell=True)
+
 #######################################################################
 # 
 # Other functions

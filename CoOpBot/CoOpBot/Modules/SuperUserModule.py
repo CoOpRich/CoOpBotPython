@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import os
+import subprocess
 import globals
 
 class SuperUserModule:
@@ -43,15 +44,18 @@ class SuperUserModule:
         #if response is None:
             #await self.bot.say("You took too long. I'm impatient, don't make me wait")
             #return
-        if response.content == "yes":
+        if response.content == "yes" or response.content == "Yes":
             """updates and reboots bot"""
             from subprocess import run
-            gitResponse = run(["sudo git -C /var/CoOpBotPython/ pull"])
+            #gitResponse = run(["sudo ls", "-lrta"])
+            gitResponse = run(["sudo", "git", "-C", "/var/CoOpBotPython/", "pull"], shell=True)
             await self.bot.say("Update started")
             await self.bot.say(gitResponse)
+            globals.getVersion()
+            await self.bot.say(version)
             # Restart program
             #os.execl("/var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
-            os.execl(__file__, "")
+            #os.execl(__file__, "")
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case SuperUserModule.
 # When we load the cog, we use the name of the file.
