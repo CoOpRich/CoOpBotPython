@@ -73,7 +73,7 @@ async def assign_game_roles():
 # 
 #######################################################################
 async def antiSpam(message):
-    bot.loop.create_task(globals.addSpamCounter(user = message.author, bot = bot, server = message.server, channel = message.channel))
+    bot.loop.create_task(globals.addSpamCounter(user = message.author, bot = bot, server = message.guild, channel = message.channel))
     bot.loop.create_task(globals.reduceSpamCounter(user = message.author, bot = bot))
 
 

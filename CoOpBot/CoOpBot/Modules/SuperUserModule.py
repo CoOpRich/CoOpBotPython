@@ -14,7 +14,7 @@ class SuperUserModule(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
-    async def say(self, ctx, guild: discord.Guild, *text: str):
+    async def say(self, ctx, *text: str):
         """Makes the discord say the given text in the given channel"""
         message = " ".join(text)
         await ctx.message.channel.send(f"{message}")
@@ -26,7 +26,8 @@ class SuperUserModule(commands.Cog):
     async def suSetSpamTimer(self, ctx, seconds: int):
         """Sets the timer for spam messaging"""
         globals.setSpamTimer(seconds)
-        await self.bot.say(f"Spam timer set to {seconds} seconds")
+        await ctx.message.channel.send(f"Spam timer set to {seconds} seconds")
+        #await self.bot.say(f"Spam timer set to {seconds} seconds")
 
 
     @commands.command(pass_context=True)
@@ -34,7 +35,8 @@ class SuperUserModule(commands.Cog):
     async def suSetSpamMessageLimit(self, ctx, messages: int):
         """Sets the message limit for spam messaging"""
         globals.setSpamMessageLimit(messages)
-        await self.bot.say(f"Spam message limit set to {messages} messages")
+        await ctx.message.channel.send(f"Spam message limit set to {messages} messages")
+        #await self.bot.say(f"Spam message limit set to {messages} messages")
         
     def restartBot():
         os.execv(__file__, sys.argv)
@@ -58,10 +60,13 @@ class SuperUserModule(commands.Cog):
             """updates and reboots bot"""
             from subprocess import check_output
             gitResponse = check_output(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
-            await self.bot.say("Update started")
-            await self.bot.say(gitResponse) # Should show results from pull
+            #await self.bot.say("Update started")
+            await ctx.message.channel.send("Update started")
+            #await self.bot.say(gitResponse)
+            await ctx.message.channel.send(gitResponse) # Should show results from pull
             globals.getVersion() # gets github commit log
-            await self.bot.say(globals.version)
+            await ctx.message.channel.send(globals.version)
+            #await self.bot.say(globals.version)
             # Restart program
             SuperUserModule.restartBot()
 

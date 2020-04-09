@@ -47,7 +47,7 @@ def getVersion():
 # Other functions
 # 
 #######################################################################
-async def addSpamCounter(user: discord.Member, bot: commands.Bot, server: discord.Server, channel: discord.Channel):
+async def addSpamCounter(user: discord.Member, bot: commands.Bot, server: discord.guild, channel: discord.channel):
     global spamControl
     global spamMessageLimit
 

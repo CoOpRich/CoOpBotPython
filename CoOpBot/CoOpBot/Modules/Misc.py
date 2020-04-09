@@ -4,7 +4,7 @@ import time
 from globals import startTime
 from datetime import datetime, timedelta
 
-class Misc:
+class Misc(commands.Cog):
     """Module for commands that don't fit into the other categories"""
 
     # Use this init method for all modules
@@ -17,7 +17,8 @@ class Misc:
         d = datetime(1,1,1) + timedelta(seconds = int(time.time() - startTime))
 
         timestring = ("%dd %02dh %02dm %02ds" % (d.day-1, d.hour, d.minute, d.second))
-        await self.bot.say(f"**Uptime:** {timestring}")
+        await ctx.message.channel.send(f"**Uptime:** {timestring}")
+        #await self.bot.say(f"**Uptime:** {timestring}")
         
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case Misc.
 # When we load the cog, we use the name of the file.
