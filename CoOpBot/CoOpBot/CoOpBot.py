@@ -5,6 +5,7 @@ from xml.dom import minidom
 import random
 import os
 import asyncio
+import globals
 
 try:
     mydoc = minidom.parse("CoOpBotParameters.xml")
@@ -19,6 +20,9 @@ prefixChar = mydoc.getElementsByTagName('PrefixChar')[0].firstChild.data
 
 description = '''Bot for the Friendly CoOp Discord server'''
 bot = commands.Bot(command_prefix = str(prefixChar), description = description)
+
+globals.setStartTime()
+
 
 @bot.event
 async def on_ready():
@@ -60,18 +64,18 @@ async def assign_game_roles():
         # TODO - check if a string translation exists from the game being played to a valid role name
 
         await asyncio.sleep(300)
-
-
-#######################################################################
-# 
-# Commands callable in the chat by using the prefix character
-# 
-#######################################################################
-#@bot.command()
-#async def add(left : int, right : int):
-#    """Adds two numbers together."""
-#    await bot.say(left + right)
     
+        
+#######################################################################
+# 
+# Anti-spam background task
+# runs every time a message is sent and mutes people if they spam too many messages
+# 
+#######################################################################
+async def antiSpam(message):
+    bot.loop.create_task(globals.addSpamCounter(user = message.author, bot = bot, server = message.server, channel = message.channel))
+    bot.loop.create_task(globals.reduceSpamCounter(user = message.author, bot = bot))
+
 
 #######################################################################
 # 
@@ -87,7 +91,9 @@ async def on_message(message):
     # We do not want the bot to reply to itself or any other bots
     if message.author.bot:
         return
-    
+
+    bot.loop.create_task(antiSpam(message))
+
     if messageStrLower == "ayyy":
         msg = "Ayyy, lmao"
 

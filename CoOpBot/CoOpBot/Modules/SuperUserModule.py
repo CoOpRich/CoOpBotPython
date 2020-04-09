@@ -1,5 +1,9 @@
 import discord
 from discord.ext import commands
+import os
+import subprocess
+import sys
+import globals
 
 class SuperUserModule(commands.Cog):
     """Module for su commands"""
@@ -19,6 +23,30 @@ class SuperUserModule(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
+    async def suSetSpamTimer(self, ctx, seconds: int):
+        """Sets the timer for spam messaging"""
+        globals.setSpamTimer(seconds)
+        await self.bot.say(f"Spam timer set to {seconds} seconds")
+
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def suSetSpamMessageLimit(self, ctx, messages: int):
+        """Sets the message limit for spam messaging"""
+        globals.setSpamMessageLimit(messages)
+        await self.bot.say(f"Spam message limit set to {messages} messages")
+        
+    def restartBot():
+        os.execv(__file__, sys.argv)
+        #os.execl(" /var/CoOpBotPython/CoOpBot/CoOpBot/CoOpBot.py")
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def restart(self, ctx):
+        SuperUserModule.restartBot()
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
     async def update(self, ctx):
         await ctx.message.channel.send(f"**Update bot using lastest Git commits?**")
         #await self.bot.say(f"**Update bot using lastest Git commits?**")
@@ -26,13 +54,16 @@ class SuperUserModule(commands.Cog):
         #if response is None:
             #await self.bot.say("You took too long. I'm impatient, don't make me wait")
             #return
-        if response.content == "yes":
+        if response.content == "yes" or response.content == "Yes":
             """updates and reboots bot"""
-            from subprocess import call
-            call(["sudo git -C /var/CoOpBotPython/ pull"])
-            await ctx.message.channel.send("Update started")
-            #await self.bot.say("Update started")
+            from subprocess import check_output
+            gitResponse = check_output(["sudo git -C /var/CoOpBotPython/ pull"], shell=True)
+            await self.bot.say("Update started")
+            await self.bot.say(gitResponse) # Should show results from pull
+            globals.getVersion() # gets github commit log
+            await self.bot.say(globals.version)
             # Restart program
+            SuperUserModule.restartBot()
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case SuperUserModule.
 # When we load the cog, we use the name of the file.
