@@ -27,6 +27,7 @@ async def on_ready():
     print(bot.user.id)
     print("Prefix char: "+prefixChar)
     print('------')
+    #await bot.change_presence(game=discord.Game(name='Resurrecting CoOpBot'))
 
 
 #######################################################################
@@ -66,10 +67,10 @@ async def assign_game_roles():
 # Commands callable in the chat by using the prefix character
 # 
 #######################################################################
-@bot.command()
-async def add(left : int, right : int):
-    """Adds two numbers together."""
-    await bot.say(left + right)
+#@bot.command()
+#async def add(left : int, right : int):
+#    """Adds two numbers together."""
+#    await bot.say(left + right)
     
 
 #######################################################################
@@ -117,7 +118,7 @@ async def on_message(message):
 
     # Send Message if we have one
     if msg != None:
-        await bot.send_message(message.channel, msg)
+        await message.channel.send(msg)
     # Try to process commands if no message sent by the bot yet
     else:
         await bot.process_commands(message)
@@ -129,6 +130,6 @@ for file in os.listdir("Modules"):
         bot.load_extension(f"Modules.{name}")
 
 # Set the background task to run
-bot.loop.create_task(assign_game_roles())
+#bot.loop.create_task(assign_game_roles())
 # Start the bot
 bot.run(token, bot=True, reconnect=True)

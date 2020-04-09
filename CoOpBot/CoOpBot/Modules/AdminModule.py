@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 
-class AdminModule:
+class AdminModule(commands.Cog):
     """Module for role management & other admin functions"""
 
     # Use this init method for all modules
@@ -38,7 +38,8 @@ class AdminModule:
         roleNameStr = " ".join(roleName)
         for role in ctx.message.server.roles:
             if role.name == roleNameStr:
-                await self.bot.say(f"A role already exists with name {roleNameStr}")
+                await ctx.message.channel.send(f"A role already exists with name {roleNameStr}")
+                #await self.bot.say(f"A role already exists with name {roleNameStr}")
                 return
 
         rng = lambda: random.randint(0,255)
@@ -59,13 +60,15 @@ class AdminModule:
     async def gamerole(self, ctx, user: discord.Member):
         """Creates a role with the name of the game that the mentioned user is playing"""
         if user.game is None:
-            await self.bot.say(f"{user.name} is not playing a game, no role created")
+            await ctx.message.channel.send(f"{user.name} is not playing a game, no role created")
+            #await self.bot.say(f"{user.name} is not playing a game, no role created")
             return
         else:
             # Make sure role does not already exist
             for role in ctx.message.server.roles:
                 if role.name == user.game.name:
-                    await self.bot.say(f"A role already exists with name {user.game.name}")
+                    await ctx.message.channel.send(f"A role already exists with name {user.game.name}")
+                    #await self.bot.say(f"A role already exists with name {user.game.name}")
                     return
 
         # Create the role
@@ -73,7 +76,8 @@ class AdminModule:
         colourValue = '{:02x}{:02x}{:02x}'.format(rng(), rng(), rng())
         colour = discord.Colour(int(colourValue, 16))
         await self.bot.create_role(ctx.message.server, name = user.game.name, mentionable = True, colour = colour)
-        await self.bot.say(f"Role for {user.game.name} created")
+        await ctx.message.channel.send(f"Role for {user.game.name} created")
+        #await self.bot.say(f"Role for {user.game.name} created")
 
 
     @commands.command(aliases = ["rm"], pass_context=True)
@@ -95,7 +99,8 @@ class AdminModule:
                 #return
             if response.content == "yes":
                 await self.bot.delete_role(server = ctx.message.server, role = role)
-                await self.bot.say("Role deleted")
+                await ctx.message.channel.send("Role deleted")
+                #await self.bot.say("Role deleted")
                 #return
         elif count == 1:
             await self.bot.say(f"```{role.name} has {count} member:{output}```")
@@ -127,7 +132,8 @@ class AdminModule:
             print("|    {:25}".format(method), end=" ")
             output += f"\n{method}"
             if (len(output) > 1900):
-                await self.bot.say(f"```{output}```")
+                await ctx.message.channel.send(f"```{output}```")
+                #await self.bot.say(f"```{output}```")
                 output = ""
                 count = 0
             else:
@@ -135,7 +141,8 @@ class AdminModule:
                 if count == 4:
                     count = 0
                     print("")
-        await self.bot.say(f"```{output}```")
+        await ctx.message.channel.send(f"```{output}```")
+        #await self.bot.say(f"```{output}```")
         
 
 # The setup fucntion below is necessary. Remember we give bot.add_cog() the name of the class in this case AdminModule.

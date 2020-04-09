@@ -3,7 +3,7 @@ from discord.ext import commands
 import random
 #from random import shuffle
 
-class CoOpGaming:
+class CoOpGaming(commands.Cog):
     """Module for su commands"""
 
     # Use this init method for all modules
@@ -15,7 +15,8 @@ class CoOpGaming:
     async def maketeams(self, ctx, numberOfTeams: int):
         """Splits the current voice chat room into a number of teams"""
         if ctx.message.author.voice_channel is None:
-            await self.bot.say("You must be in a voice channel to use this command")
+            await ctx.message.channel.send("You must be in a voice channel to use this command")
+            #await self.bot.say("You must be in a voice channel to use this command")
             return
 
         channelsMade = 0
